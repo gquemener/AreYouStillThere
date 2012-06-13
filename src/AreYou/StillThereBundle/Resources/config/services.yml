@@ -1,0 +1,7 @@
+parameters:
+#    are_you_still_there.example.class: AreYou\StillThereBundle\Example
+
+services:
+#    are_you_still_there.example:
+#        class: %are_you_still_there.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

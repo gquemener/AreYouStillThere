@@ -1,0 +1,3 @@
+AreYouStillThereBundle_homepage:
+    pattern:  /
+    defaults: { _controller: AreYouStillThereBundle:Default:index }
