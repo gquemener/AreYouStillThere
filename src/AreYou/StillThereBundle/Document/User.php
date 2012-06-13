@@ -49,7 +49,7 @@ class User extends UnregisteredUser implements \JsonSerializable
         $this->followers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->heartbeats = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
@@ -58,11 +58,6 @@ class User extends UnregisteredUser implements \JsonSerializable
     public function getId()
     {
         return $this->id;
-    }
-
-    public function getLastHearbeat()
-    {
-        return $this->heartbeat->last();
     }
 
     /**
@@ -165,13 +160,18 @@ class User extends UnregisteredUser implements \JsonSerializable
         return $this->heartbeats;
     }
 
+    public function getLastHeartbeat()
+    {
+        return $this->heartbeats->last();
+    }
+
     public function JsonSerialize()
     {
         return [
             'username'             => $this->username,
             'email'                => $this->email,
             'noHeartbeatTimeLimit' => $this->noHeartbeatTimeLimit,
-            'lastHeartbeat'        => $this->heartbeats->last()->getDate()->getTimestamp(),
+            'lastHeartbeat'        => $this->getLastHeartbeat()->getDate()->getTimestamp(),
             ];
     }
 }
