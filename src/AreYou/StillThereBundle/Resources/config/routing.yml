@@ -1,4 +1,4 @@
-homepage:
+hearbeat:
     pattern:  /heartbeat
     defaults: { _controller: AreYouStillThereBundle:Heartbeat:index }
 

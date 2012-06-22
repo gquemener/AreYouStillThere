@@ -18,7 +18,14 @@ class HeartbeatController extends Controller
     public function sendAction()
     {
         $user = $this->getUser();
-        $user->addHeartbeats(new Heartbeat());
-        $this->getDocumentManager()->flush();
+        $heartbeat = new Heartbeat();
+        $user->addHeartbeats($heartbeat);
+
+        $dm = $this->getDocumentManager();
+        $dm->persist($user);
+        $dm->persist($heartbeat);
+        $dm->flush();
+
+        return $this->redirect($this->generateUrl('hearbeat'));
     }
 }
