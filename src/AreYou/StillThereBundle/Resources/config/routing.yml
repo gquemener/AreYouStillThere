@@ -1,3 +1,8 @@
-AreYouStillThereBundle_homepage:
-    pattern:  /
-    defaults: { _controller: AreYouStillThereBundle:Default:index }
+homepage:
+    pattern:  /heartbeat
+    defaults: { _controller: AreYouStillThereBundle:Heartbeat:index }
+
+send_heartbeat:
+    pattern:  /heartbeat/send
+    defaults: { _controller: AreYouStillThereBundle:Heartbeat:send }
+    requirements: { _method: POST }

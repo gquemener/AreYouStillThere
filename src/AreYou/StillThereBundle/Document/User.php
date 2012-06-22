@@ -2,12 +2,13 @@
 
 namespace AreYou\StillThereBundle\Document;
 
+use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
  * @MongoDB\Document(collection="users")
  */
-class User extends UnregisteredUser implements \JsonSerializable
+class User extends UnregisteredUser implements UserInterface, \Serializable
 {
     /**
      * @MongoDB\Id
@@ -28,7 +29,7 @@ class User extends UnregisteredUser implements \JsonSerializable
      * @MongoDB\ReferenceMany(
      *   discriminatorMap={
      *      "user"="User",
-     *      "unregisteredUser"="UnregisterUser"
+     *      "unregisteredUser"="UnregisteredUser"
      *   }
      * )
      */
@@ -44,10 +45,21 @@ class User extends UnregisteredUser implements \JsonSerializable
      */
     protected $noHeartbeatTimeLimit;
 
+    /**
+     * @MongoDB\String
+     */
+    protected $password;
+
+    /**
+     * @MongoDB\String
+     */
+    protected $salt;
+
     public function __construct()
     {
-        $this->followers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->followers  = new \Doctrine\Common\Collections\ArrayCollection();
         $this->heartbeats = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->salt       = md5(uniqid(null, true));
     }
 
     /**
@@ -165,13 +177,47 @@ class User extends UnregisteredUser implements \JsonSerializable
         return $this->heartbeats->last();
     }
 
-    public function JsonSerialize()
+    public function getRoles()
     {
-        return [
-            'username'             => $this->username,
-            'email'                => $this->email,
-            'noHeartbeatTimeLimit' => $this->noHeartbeatTimeLimit,
-            'lastHeartbeat'        => $this->getLastHeartbeat()->getDate()->getTimestamp(),
-            ];
+        return array('ROLE_USER');
+    }
+
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
+
+    public function getSalt()
+    {
+        return $this->salt;
+    }
+
+    public function setSalt($salt)
+    {
+        $this->salt = $salt;
+    }
+
+    public function eraseCredentials()
+    {
+    }
+
+    public function equals(UserInterface $user)
+    {
+        return $this->id === $user->getId();
+    }
+
+    public function serialize()
+    {
+        return serialize(array($this->id, $this->username));
+    }
+
+    public function unserialize($serialized)
+    {
+        list($this->id, $this->username) = unserialize($serialized);
     }
 }

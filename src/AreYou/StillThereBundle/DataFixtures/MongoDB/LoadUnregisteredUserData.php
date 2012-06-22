@@ -11,15 +11,15 @@ class LoadUnregisteredUserData extends AbstractFixture implements OrderedFixture
 {
     public function load(ObjectManager $manager)
     {
-        $unregUser = new UnregisteredUser();
-        $unregUser->setEmail('mario@example.com');
-        $manager->persist($unregUser);
-        $this->addReference('unregistered-user-mario', $unregUser);
+        $mario = new UnregisteredUser();
+        $mario->setEmail('mario@example.com');
+        $manager->persist($mario);
+        $this->addReference('unregistered-user-mario', $mario);
 
-        $unregUser = new UnregisteredUser();
-        $unregUser->setEmail('cratos@example.com');
-        $manager->persist($unregUser);
-        $this->addReference('unregistered-user-cratos', $unregUser);
+        $cratos = new UnregisteredUser();
+        $cratos->setEmail('cratos@example.com');
+        $manager->persist($cratos);
+        $this->addReference('unregistered-user-cratos', $cratos);
 
         $manager->flush();
     }

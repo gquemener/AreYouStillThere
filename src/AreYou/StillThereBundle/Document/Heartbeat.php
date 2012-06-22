@@ -27,8 +27,13 @@ class Heartbeat
 
     /**
      * @MongoDB\EmbedOne(targetDocument="Coordinates")
-     */    
+     */
     protected $location;
+
+    public function __construct()
+    {
+        $this->date = new \Datetime();
+    }
 
     /**
      * Get id

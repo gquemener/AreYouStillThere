@@ -19,31 +19,16 @@ class UnregisteredUser
      */
     protected $email;
 
-    /**
-     * Get id
-     *
-     * @return id $id
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set email
-     *
-     * @param string $email
-     */
     public function setEmail($email)
     {
         $this->email = $email;
     }
 
-    /**
-     * Get email
-     *
-     * @return string $email
-     */
     public function getEmail()
     {
         return $this->email;

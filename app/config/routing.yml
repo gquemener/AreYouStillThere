@@ -1,8 +1,10 @@
+login:
+    pattern: /login
+    defaults: { _controller: AreYouStillThereBundle:Security:login }
+
+login_check:
+    pattern: /login_check
+
 AreYouStillThereBundle:
     resource: "@AreYouStillThereBundle/Resources/config/routing.yml"
     prefix:   /
-
-# Internal routing configuration to handle ESI
-#_internal:
-#   resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
-#   prefix:   /_internal

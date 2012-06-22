@@ -1,0 +1,42 @@
+{% extends '::base.html.twig' %}
+
+
+{% block javascript %}
+
+{% endblock %}
+
+
+{% block body %}
+
+    <p>Connected as : {{ user.username }}</p>
+
+    <p>Last heartbeat : {{ user.lastHeartBeat.date is defined ? user.lastHeartBeat.date|date('d/m/Y H:i:s') : 'N/A' }}</p>
+    <p>Timeout: {{ user.noHeartbeatTimeLimit }}</p>
+
+    <p>
+        Heartbeats:
+        <ul>
+            {% for heartbeat in user.heartbeats %}
+            <li>{{ heartbeat.date|date('d/m/Y H:i:s') }} : {{ heartbeat.message }}</li>
+            {% endfor %}
+        </ul>
+    </p>
+
+    <p>
+        Followers:
+        <ul>
+            {% for follower in user.followers %}
+            <li>{{ follower.email }}</li>
+            {% endfor %}
+        </ul>
+    </p>
+
+    <p>Are You Still There?</p>
+
+    <form novalidate action="{{ path('send_heartbeat') }}" method="POST">
+
+        <input type="submit" value="Yes!" />
+
+    </form>
+
+{% endblock %}
