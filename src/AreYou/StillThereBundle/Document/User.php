@@ -36,7 +36,7 @@ class User extends UnregisteredUser implements UserInterface, \Serializable
     protected $followers;
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument="Heartbeat")
+     * @MongoDB\ReferenceMany(targetDocument="Heartbeat", sort={"date"="-1"})
      */
     protected $heartbeats;
 
@@ -155,11 +155,11 @@ class User extends UnregisteredUser implements UserInterface, \Serializable
     /**
      * Add heartbeats
      *
-     * @param AreYou\StillThereBundle\Document\Heartbeat $heartbeats
+     * @param Heartbeat $heartbeats
      */
-    public function addHeartbeats(\AreYou\StillThereBundle\Document\Heartbeat $heartbeats)
+    public function addHeartbeats(Heartbeat $heartbeat)
     {
-        $this->heartbeats[] = $heartbeats;
+        $this->heartbeats[] = $heartbeat;
     }
 
     /**

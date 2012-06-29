@@ -7,41 +7,21 @@
 
 
 {% block body %}
-
-    <p>Connected as : {{ user.username }}</p>
-
-    <p>Last heartbeat : {{ user.lastHeartBeat.date is defined ? user.lastHeartBeat.date|date('d/m/Y H:i:s') : 'N/A' }}</p>
-    <p>Timeout: {{ user.noHeartbeatTimeLimit }}</p>
-
-    <p>
-        Heartbeats:
+<div class="hero-unit">
+    <h1 data-lastheartbeat="{{ user.lastHeartBeat.date.timestamp }}" data-timeout="{{ user.noHeartbeatTimeLimit }}" class="timeleft">--d --:--:--</h1>
+    <p>Last Time you gave news was {{ user.lastHeartBeat.date|date('d/m/Y') }} at {{ user.lastHeartBeat.date|date('H:i:s') }} with message: “{{ user.lastHeartBeat.message }}”</p>
+        <form novalidate action="{{ path('user_is_alive', {'username': 'me'}) }}" method="POST">
+            <input class="btn btn-success btn-large" type="submit" value="Yes I am !" />
+        </form>
+</div>
+<div class="row">
+    <div class="span12">
+        <h2>Historique</h2>
         <ul>
             {% for heartbeat in user.heartbeats %}
             <li>{{ heartbeat.date|date('d/m/Y H:i:s') }} : {{ heartbeat.message }}</li>
             {% endfor %}
         </ul>
-    </p>
-
-    <p>
-        Followers:
-        <ul>
-            {% for follower in user.followers %}
-            <li>{{ follower.email }}</li>
-            {% endfor %}
-        </ul>
-    </p>
-
-    <p>Are You Still There?</p>
-    <p>
-    <span data-lastheartbeat="{{ user.lastHeartBeat.date.timestamp }}" data-timeout="{{ user.noHeartbeatTimeLimit }}" class="timeleft">
-            --d --:--:--
-        </span>
-    </p>
-
-    <form novalidate action="{{ path('user_is_alive', {'username': 'me'}) }}" method="POST">
-
-        <input type="submit" value="Yes!" />
-
-    </form>
-
+    </div>
+</div>
 {% endblock %}

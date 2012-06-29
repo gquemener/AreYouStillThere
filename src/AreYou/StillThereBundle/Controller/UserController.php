@@ -17,17 +17,19 @@ class UserController extends Controller
         ]);
     }
 
-    public function isAliveAction()
+    public function isAliveAction($username)
     {
-        $user = $this->getUser();
+        if ('me' === $username) {
+            $user = $this->getUser();
+        }
+        $dm = $this->getDocumentManager();
+
         $heartbeat = new Heartbeat();
         $user->addHeartbeats($heartbeat);
 
-        $dm = $this->getDocumentManager();
-        $dm->persist($user);
         $dm->persist($heartbeat);
         $dm->flush();
 
-        return $this->redirect($this->generateUrl('hearbeat'));
+        return $this->redirect($this->generateUrl('show_user', array('username' => 'me')));
     }
 }
