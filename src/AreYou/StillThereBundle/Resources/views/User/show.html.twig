@@ -32,8 +32,13 @@
     </p>
 
     <p>Are You Still There?</p>
+    <p>
+    <span data-lastheartbeat="{{ user.lastHeartBeat.date.timestamp }}" data-timeout="{{ user.noHeartbeatTimeLimit }}" class="timeleft">
+            --d --:--:--
+        </span>
+    </p>
 
-    <form novalidate action="{{ path('send_heartbeat') }}" method="POST">
+    <form novalidate action="{{ path('user_is_alive', {'username': 'me'}) }}" method="POST">
 
         <input type="submit" value="Yes!" />
 

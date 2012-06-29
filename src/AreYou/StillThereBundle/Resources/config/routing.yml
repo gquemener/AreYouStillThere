@@ -1,8 +1,8 @@
-hearbeat:
-    pattern:  /heartbeat
-    defaults: { _controller: AreYouStillThereBundle:Heartbeat:index }
+show_user:
+    pattern:  /{username}
+    defaults: { _controller: AreYouStillThereBundle:User:show }
 
-send_heartbeat:
-    pattern:  /heartbeat/send
-    defaults: { _controller: AreYouStillThereBundle:Heartbeat:send }
+user_is_alive:
+    pattern:  /{username}/is-alive
+    defaults: { _controller: AreYouStillThereBundle:User:isAlive }
     requirements: { _method: POST }

@@ -34,7 +34,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, C
         $barret = $this->createUser([
             'setEmail'                => 'barret@example.com',
             'setUsername'             => 'barret',
-            'setNoHeartbeatTimeLimit' => 86400,
+            'setNoHeartbeatTimeLimit' => 172800,
             'setPassword'             => 'barretpass',
         ]);
 

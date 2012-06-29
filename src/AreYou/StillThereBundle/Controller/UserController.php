@@ -4,18 +4,20 @@ namespace AreYou\StillThereBundle\Controller;
 
 use AreYou\StillThereBundle\Document\Heartbeat;
 
-class HeartbeatController extends Controller
+class UserController extends Controller
 {
-    public function indexAction()
+    public function showAction($username)
     {
-        $user = $this->getUser();
+        if ('me' === $username) {
+            $user = $this->getUser();
+        }
 
-        return $this->render('AreYouStillThereBundle:Heartbeat:index.html.twig', [
+        return $this->render('AreYouStillThereBundle:User:show.html.twig', [
             'user' => $user,
         ]);
     }
 
-    public function sendAction()
+    public function isAliveAction()
     {
         $user = $this->getUser();
         $heartbeat = new Heartbeat();
