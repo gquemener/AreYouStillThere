@@ -14,23 +14,22 @@ class LoadHeartbeatData extends AbstractFixture implements OrderedFixtureInterfa
         $heartbeat = new Heartbeat();
         $heartbeat->setDate(new \Datetime());
         $heartbeat->setMessage('Bien arrivé en Normandie');
-        $heartbeat->setLocation($this->getReference('coordinates-caen'));
+        $heartbeat->setUser($this->getReference('barret'));
         $manager->persist($heartbeat);
-        $this->addReference('heartbeat-barret-1', $heartbeat);
         sleep(1);
 
         $heartbeat = new Heartbeat();
         $heartbeat->setDate(new \Datetime());
         $heartbeat->setMessage('Sur le départ');
+        $heartbeat->setUser($this->getReference('barret'));
         $manager->persist($heartbeat);
-        $this->addReference('heartbeat-barret-2', $heartbeat);
         sleep(1);
 
         $heartbeat = new Heartbeat();
         $heartbeat->setDate(new \Datetime());
         $heartbeat->setMessage('Bloqué dans les bouchons');
+        $heartbeat->setUser($this->getReference('barret'));
         $manager->persist($heartbeat);
-        $this->addReference('heartbeat-barret-3', $heartbeat);
         sleep(1);
 
         $manager->flush();
@@ -38,6 +37,6 @@ class LoadHeartbeatData extends AbstractFixture implements OrderedFixtureInterfa
 
     public function getOrder()
     {
-        return 25;
+        return 30;
     }
 }

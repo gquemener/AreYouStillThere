@@ -4,6 +4,7 @@ namespace AreYou\StillThereBundle\Document;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @MongoDB\Document(collection="users")
@@ -22,6 +23,7 @@ class User extends UnregisteredUser implements UserInterface, \Serializable
 
     /**
      * @MongoDB\String
+     * @MongoDB\UniqueIndex(order="asc")
      */
     protected $username;
 
@@ -36,7 +38,11 @@ class User extends UnregisteredUser implements UserInterface, \Serializable
     protected $followers;
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument="Heartbeat", sort={"date"="-1"})
+     * @MongoDB\ReferenceMany(
+     *   targetDocument="Heartbeat",
+     *   mappedBy="user",
+     *   sort={"date"="desc"}
+     * )
      */
     protected $heartbeats;
 
@@ -57,116 +63,61 @@ class User extends UnregisteredUser implements UserInterface, \Serializable
 
     public function __construct()
     {
-        $this->followers  = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->heartbeats = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->followers  = new ArrayCollection();
+        $this->heartbeats = new ArrayCollection();
         $this->salt       = md5(uniqid(null, true));
     }
 
-    /**
-     * Get id
-     *
-     * @return id $id
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set email
-     *
-     * @param string $email
-     */
     public function setEmail($email)
     {
         $this->email = $email;
     }
 
-    /**
-     * Get email
-     *
-     * @return string $email
-     */
     public function getEmail()
     {
         return $this->email;
     }
 
-    /**
-     * Set username
-     *
-     * @param string $username
-     */
     public function setUsername($username)
     {
         $this->username = $username;
     }
 
-    /**
-     * Get username
-     *
-     * @return string $username
-     */
     public function getUsername()
     {
         return $this->username;
     }
 
-    /**
-     * Add followers
-     *
-     * @param $followers
-     */
     public function addFollowers($followers)
     {
         $this->followers[] = $followers;
     }
 
-    /**
-     * Get followers
-     *
-     * @return Doctrine\Common\Collections\Collection $followers
-     */
     public function getFollowers()
     {
         return $this->followers;
     }
 
-    /**
-     * Set noHeartbeatTimeLimit
-     *
-     * @param int $noHeartbeatTimeLimit
-     */
     public function setNoHeartbeatTimeLimit($noHeartbeatTimeLimit)
     {
         $this->noHeartbeatTimeLimit = $noHeartbeatTimeLimit;
     }
 
-    /**
-     * Get noHeartbeatTimeLimit
-     *
-     * @return int $noHeartbeatTimeLimit
-     */
     public function getNoHeartbeatTimeLimit()
     {
         return $this->noHeartbeatTimeLimit;
     }
 
-    /**
-     * Add heartbeats
-     *
-     * @param Heartbeat $heartbeats
-     */
     public function addHeartbeats(Heartbeat $heartbeat)
     {
         $this->heartbeats[] = $heartbeat;
     }
 
-    /**
-     * Get heartbeats
-     *
-     * @return Doctrine\Common\Collections\Collection $heartbeats
-     */
     public function getHeartbeats()
     {
         return $this->heartbeats;
@@ -174,7 +125,7 @@ class User extends UnregisteredUser implements UserInterface, \Serializable
 
     public function getLastHeartbeat()
     {
-        return $this->heartbeats->last();
+        return $this->heartbeats->first();
     }
 
     public function getRoles()

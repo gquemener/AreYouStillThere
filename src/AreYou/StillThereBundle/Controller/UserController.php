@@ -2,7 +2,9 @@
 
 namespace AreYou\StillThereBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use AreYou\StillThereBundle\Document\Heartbeat;
+use AreYou\StillThereBundle\Form\HeartbeatType;
 
 class UserController extends Controller
 {
@@ -10,26 +12,46 @@ class UserController extends Controller
     {
         if ('me' === $username) {
             $user = $this->getUser();
+        } else {
+            $user = $this->findUserOr404($username);
         }
+
+        $heartbeat = new Heartbeat();
+        $form = $this->getHeartbeatForm($heartbeat);
 
         return $this->render('AreYouStillThereBundle:User:show.html.twig', [
             'user' => $user,
+            'form' => $form->createView(),
         ]);
     }
 
-    public function isAliveAction($username)
+    public function isAliveAction(Request $request, $username)
     {
         if ('me' === $username) {
             $user = $this->getUser();
         }
-        $dm = $this->getDocumentManager();
 
         $heartbeat = new Heartbeat();
-        $user->addHeartbeats($heartbeat);
+        $form = $this->getHeartbeatForm($heartbeat);
+        $form->bindRequest($request);
 
-        $dm->persist($heartbeat);
-        $dm->flush();
+        if ($form->isValid()) {
+            $dm = $this->getDocumentManager();
+
+            $heartbeat->setUser($user);
+            $dm->persist($heartbeat);
+
+            $dm->flush();
+        }
 
         return $this->redirect($this->generateUrl('show_user', array('username' => 'me')));
+    }
+
+    private function getHeartbeatForm($heartbeat)
+    {
+        return $this->createForm(
+            new HeartbeatType(),
+            $heartbeat
+        );
     }
 }
