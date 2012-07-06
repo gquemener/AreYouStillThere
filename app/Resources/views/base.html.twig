@@ -20,7 +20,7 @@
                     <a class="brand" href="#">Are You Still There?</a>
                     <div class="nav-collapse">
                         <ul class="nav pull-right">
-                            <li><a href="#">{{ app.user.username }}</a></li>
+                            <li><a href="#">{{ app.user ? app.user.username : 'Anonymous' }}</a></li>
                         </ul>
                     </div>
                 </div>

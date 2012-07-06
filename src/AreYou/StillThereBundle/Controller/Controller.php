@@ -33,4 +33,20 @@ class Controller extends BaseController
 
         return $user;
     }
+
+    public function findUserOr404($username)
+    {
+        $user = $this->getUserRepository()->findOneBy(array(
+            'username' => $username,
+        ));
+
+        if (null === $user) {
+            throw $this->createNotFoundException(sprintf(
+                'No user found with username %s',
+                $username
+            ));
+        }
+
+        return $user;
+    }
 }

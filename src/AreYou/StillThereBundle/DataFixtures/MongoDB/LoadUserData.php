@@ -48,16 +48,17 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, C
 
         $barret->addFollowers($this->getReference('unregistered-user-mario'));
         $barret->addFollowers($this->getReference('unregistered-user-cratos'));
-        $barret->addHeartbeats($this->getReference('heartbeat-barret-1'));
-        $barret->addHeartbeats($this->getReference('heartbeat-barret-2'));
-        $barret->addHeartbeats($this->getReference('heartbeat-barret-3'));
         $cid->addFollowers($barret);
 
         $barret->setPassword($this->getPassword($barret));
         $cid->setPassword($this->getPassword($cid));
 
-        $manager->persist($cid);
         $manager->persist($barret);
+        $manager->persist($cid);
+
+        $this->addReference('barret', $barret);
+        $this->addReference('cid', $cid);
+
         $manager->flush();
     }
 
@@ -72,6 +73,6 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, C
 
     public function getOrder()
     {
-        return 30;
+        return 20;
     }
 }

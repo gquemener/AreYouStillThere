@@ -1,27 +1,38 @@
 {% extends '::base.html.twig' %}
 
 
-{% block javascript %}
-
-{% endblock %}
-
-
 {% block body %}
 <div class="hero-unit">
+
+    {% if user.lastHeartBeat %}
+
     <h1 data-lastheartbeat="{{ user.lastHeartBeat.date.timestamp }}" data-timeout="{{ user.noHeartbeatTimeLimit }}" class="timeleft">--d --:--:--</h1>
-    <p>Last Time you gave news was {{ user.lastHeartBeat.date|date('d/m/Y') }} at {{ user.lastHeartBeat.date|date('H:i:s') }} with message: “{{ user.lastHeartBeat.message }}”</p>
-        <form novalidate action="{{ path('user_is_alive', {'username': 'me'}) }}" method="POST">
-            <input class="btn btn-success btn-large" type="submit" value="Yes I am !" />
-        </form>
-</div>
-<div class="row">
-    <div class="span12">
-        <h2>Historique</h2>
-        <ul>
-            {% for heartbeat in user.heartbeats %}
-            <li>{{ heartbeat.date|date('d/m/Y H:i:s') }} : {{ heartbeat.message }}</li>
-            {% endfor %}
-        </ul>
+
+    <h2>
+        Last Time {{ app.user == user ? 'you' : user.username }} gave news was {{ user.lastHeartBeat.date|date('d/m/Y') }} at {{ user.lastHeartBeat.date|date('H:i:s') }} with
+        {{ user.lastHeartBeat.message ? ' message:' : ' no message' }}
+    </h2>
+    {% if user.lastHeartBeat.message %}
+    <div class="well">{{ user.lastHeartBeat.message }}</div>
+    {% endif %}
+
+    {% else %}
+
+    <h3>{{ user.username }} has never given us any news from him/her :(</h3>
+
+    {% endif %}
+
+    {% if app.user == user %}
+    <form action="{{ path('user_is_alive', {'username': 'me'}) }}" method="POST">
+         <div class="control-group">
+      <div class="controls">
+        {{ form_widget(form.message) }}
     </div>
+    </div>
+        <input id="alive" class="btn btn-large" type="submit" value="Yes I am !" />
+        {{ form_rest(form) }}
+    </form>
+    {% endif %}
+
 </div>
 {% endblock %}
