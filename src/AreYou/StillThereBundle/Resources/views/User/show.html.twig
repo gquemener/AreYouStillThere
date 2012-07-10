@@ -26,11 +26,11 @@
     <form action="{{ path('user_is_alive', {'username': 'me'}) }}" method="POST">
         <div class="control-group">
             <div class="controls">
-                {{ form_widget(is_alive_form.message) }}
+                {{ form_widget(form.message) }}
             </div>
         </div>
         <input id="alive" class="btn btn-large" type="submit" value="Yes I am !" />
-        {{ form_rest(is_alive_form) }}
+        {{ form_rest(form) }}
     </form>
     {% endif %}
 

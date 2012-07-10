@@ -5,9 +5,40 @@ namespace AreYou\StillThereBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AreYou\StillThereBundle\Document\Heartbeat;
 use AreYou\StillThereBundle\Form\HeartbeatType;
+use AreYou\StillThereBundle\Form\UserType;
 
 class UserController extends Controller
 {
+    public function indexAction()
+    {
+        $users = $this->getUserRepository()->findAll();
+
+        return $this->render('AreYouStillThereBundle:User:index.html.twig', [
+            'users' => $users,
+        ]);
+    }
+
+    public function editAction(Request $request, $username)
+    {
+        if ('me' === $username) {
+            $user = $this->getUser();
+        }
+
+        $userForm = $this->getUserForm($user);
+
+        if ('PUT' === $request->getMethod()) {
+            $userForm->bindRequest($request);
+            if ($userForm->isValid()) {
+                $this->getDocumentManager()->flush();
+            }
+        }
+
+        return $this->render('AreYouStillThereBundle:User:edit.html.twig', [
+            'user' => $user,
+            'form' => $userForm->createView(),
+        ]);
+    }
+
     public function showAction($username)
     {
         if ('me' === $username) {
@@ -20,8 +51,8 @@ class UserController extends Controller
         $isAliveForm = $this->getIsAliveForm($heartbeat);
 
         return $this->render('AreYouStillThereBundle:User:show.html.twig', [
-            'user'          => $user,
-            'is_alive_form' => $isAliveForm->createView(),
+            'user' => $user,
+            'form' => $isAliveForm->createView(),
         ]);
     }
 
@@ -32,7 +63,7 @@ class UserController extends Controller
         }
 
         $heartbeat = new Heartbeat();
-        $form = $this->getHeartbeatForm($heartbeat);
+        $form = $this->getIsAliveForm($heartbeat);
         $form->bindRequest($request);
 
         if ($form->isValid()) {
@@ -79,4 +110,11 @@ class UserController extends Controller
         );
     }
 
+    private function getUserForm($user)
+    {
+        return $this->createForm(
+            new UserType(),
+            $user
+        );
+    }
 }
