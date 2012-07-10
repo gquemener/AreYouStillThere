@@ -16,12 +16,12 @@ class UserController extends Controller
             $user = $this->findUserOr404($username);
         }
 
-        $heartbeat = new Heartbeat();
-        $form = $this->getHeartbeatForm($heartbeat);
+        $heartbeat   = new Heartbeat();
+        $isAliveForm = $this->getIsAliveForm($heartbeat);
 
         return $this->render('AreYouStillThereBundle:User:show.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
+            'user'          => $user,
+            'is_alive_form' => $isAliveForm->createView(),
         ]);
     }
 
@@ -47,11 +47,36 @@ class UserController extends Controller
         return $this->redirect($this->generateUrl('show_user', array('username' => 'me')));
     }
 
-    private function getHeartbeatForm($heartbeat)
+    public function followAction(Request $request, $username)
+    {
+        $user = $this->findUserOr404($username);
+        $currentUser = $this->getUser();
+
+        $user->addFollower($currentUser);
+
+        $this->getDocumentManager()->flush();
+
+        return $this->redirect($this->generateUrl('show_user', array('username' => $username)));
+    }
+
+    public function unfollowAction(Request $request, $username)
+    {
+        $user = $this->findUserOr404($username);
+        $currentUser = $this->getUser();
+
+        $user->removeFollower($currentUser);
+
+        $this->getDocumentManager()->flush();
+
+        return $this->redirect($this->generateUrl('show_user', array('username' => $username)));
+    }
+
+    private function getIsAliveForm($heartbeat)
     {
         return $this->createForm(
             new HeartbeatType(),
             $heartbeat
         );
     }
+
 }

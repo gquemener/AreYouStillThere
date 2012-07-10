@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @MongoDB\Document(collection="users")
  */
-class User extends UnregisteredUser implements UserInterface, \Serializable
+class User implements UserInterface, \Serializable
 {
     /**
      * @MongoDB\Id
@@ -28,14 +28,14 @@ class User extends UnregisteredUser implements UserInterface, \Serializable
     protected $username;
 
     /**
-     * @MongoDB\ReferenceMany(
-     *   discriminatorMap={
-     *      "user"="User",
-     *      "unregisteredUser"="UnregisteredUser"
-     *   }
-     * )
+     * @MongoDB\ReferenceMany(targetDocument="User", mappedBy="following")
      */
     protected $followers;
+
+    /**
+     * @MongoDB\ReferenceMany(targetDocument="User", inversedBy="followers")
+     */
+    protected $following;
 
     /**
      * @MongoDB\ReferenceMany(
@@ -64,6 +64,7 @@ class User extends UnregisteredUser implements UserInterface, \Serializable
     public function __construct()
     {
         $this->followers  = new ArrayCollection();
+        $this->following  = new ArrayCollection();
         $this->heartbeats = new ArrayCollection();
         $this->salt       = md5(uniqid(null, true));
     }
@@ -93,14 +94,36 @@ class User extends UnregisteredUser implements UserInterface, \Serializable
         return $this->username;
     }
 
-    public function addFollowers($followers)
+    public function addFollower($user)
     {
-        $this->followers[] = $followers;
+        $this->followers[] = $user;
+        $user->addFollowing($this);
+    }
+
+    public function addFollowing($user)
+    {
+        $this->following[] = $user;
+    }
+
+    public function getFollowing()
+    {
+        return $this->following;
     }
 
     public function getFollowers()
     {
         return $this->followers;
+    }
+
+    public function removeFollower($user)
+    {
+        $this->followers->removeElement($user);
+        $user->removeFollowing($this);
+    }
+
+    public function removeFollowing($user)
+    {
+        return $this->following->removeElement($user);
     }
 
     public function setNoHeartbeatTimeLimit($noHeartbeatTimeLimit)

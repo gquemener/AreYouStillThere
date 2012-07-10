@@ -45,10 +45,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, C
             'setPassword'             => 'cidpass',
         ]);
 
-
-        $barret->addFollowers($this->getReference('unregistered-user-mario'));
-        $barret->addFollowers($this->getReference('unregistered-user-cratos'));
-        $cid->addFollowers($barret);
+        $cid->addFollower($barret);
 
         $barret->setPassword($this->getPassword($barret));
         $cid->setPassword($this->getPassword($cid));

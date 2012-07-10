@@ -24,14 +24,32 @@
 
     {% if app.user == user %}
     <form action="{{ path('user_is_alive', {'username': 'me'}) }}" method="POST">
-         <div class="control-group">
-      <div class="controls">
-        {{ form_widget(form.message) }}
-    </div>
-    </div>
+        <div class="control-group">
+            <div class="controls">
+                {{ form_widget(is_alive_form.message) }}
+            </div>
+        </div>
         <input id="alive" class="btn btn-large" type="submit" value="Yes I am !" />
-        {{ form_rest(form) }}
+        {{ form_rest(is_alive_form) }}
     </form>
+    {% endif %}
+
+    {% if app.user != user %}
+        {% if user in app.user.following %}
+        <form action="{{ path('unfollow_user', {'username': user.username}) }}" method="POST">
+            <input type="hidden" name="_method" value="DELETE"/>
+            <button class="btn btn-info" type="submit">
+                <i class="icon-eye-close"></i>
+            </button>
+        </form>
+        {% else %}
+        <form action="{{ path('follow_user', {'username': user.username}) }}" method="POST">
+            <input type="hidden" name="_method" value="PUT"/>
+            <button class="btn btn-info" type="submit">
+                <i class="icon-eye-open"></i>
+            </button>
+        </form>
+        {% endif %}
     {% endif %}
 
 </div>

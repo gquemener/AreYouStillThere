@@ -6,3 +6,13 @@ user_is_alive:
     pattern:  /{username}/is-alive
     defaults: { _controller: AreYouStillThereBundle:User:isAlive }
     requirements: { _method: POST }
+
+follow_user:
+    pattern:  /{username}/follow
+    defaults: { _controller: AreYouStillThereBundle:User:follow }
+    requirements: { _method: PUT }
+
+unfollow_user:
+    pattern:  /{username}/unfollow
+    defaults: { _controller: AreYouStillThereBundle:User:unfollow }
+    requirements: { _method: DELETE }
