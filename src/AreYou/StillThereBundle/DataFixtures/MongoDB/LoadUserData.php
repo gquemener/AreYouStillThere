@@ -36,6 +36,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, C
             'setUsername'             => 'barret',
             'setNoHeartbeatTimeLimit' => 172800,
             'setPassword'             => 'barretpass',
+            'setBeaconActivated'      => true,
         ]);
 
         $cid = $this->createUser([
@@ -43,6 +44,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, C
             'setUsername'             => 'cid',
             'setNoHeartbeatTimeLimit' => 86400,
             'setPassword'             => 'cidpass',
+            'setBeaconActivated'      => true,
         ]);
 
         $cid->addFollower($barret);
