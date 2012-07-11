@@ -4,6 +4,7 @@ namespace AreYou\StillThereBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use AreYou\StillThereBundle\Document\Heartbeat;
+use AreYou\StillThereBundle\Document\User;
 use AreYou\StillThereBundle\Form\HeartbeatType;
 use AreYou\StillThereBundle\Form\UserType;
 
@@ -47,13 +48,19 @@ class UserController extends Controller
             $user = $this->findUserOr404($username);
         }
 
-        $heartbeat   = new Heartbeat();
-        $isAliveForm = $this->getIsAliveForm($heartbeat);
+        if ($user->isBeaconActivated()) {
+            $heartbeat   = new Heartbeat();
+            $isAliveForm = $this->getIsAliveForm($heartbeat);
 
-        return $this->render('AreYouStillThereBundle:User:show.html.twig', [
-            'user' => $user,
-            'form' => $isAliveForm->createView(),
-        ]);
+            return $this->render('AreYouStillThereBundle:User:show.html.twig', [
+                'user' => $user,
+                'form' => $isAliveForm->createView(),
+            ]);
+        } else {
+            return $this->forward('AreYouStillThereBundle:User:deactivated', [
+                'user' => $user,
+            ]);
+        }
     }
 
     public function isAliveAction(Request $request, $username)
@@ -100,6 +107,13 @@ class UserController extends Controller
         $this->getDocumentManager()->flush();
 
         return $this->redirect($this->generateUrl('show_user', array('username' => $username)));
+    }
+
+    public function deactivatedAction(User $user)
+    {
+        return $this->render('AreYouStillThereBundle:User:deactivated.html.twig', [
+            'user' => $user,
+        ]);
     }
 
     private function getIsAliveForm($heartbeat)

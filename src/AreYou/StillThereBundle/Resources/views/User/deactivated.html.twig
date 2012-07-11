@@ -1,0 +1,15 @@
+{% extends '::base.html.twig' %}
+
+
+{% block body %}
+<div class="hero-unit">
+
+    {% if app.user == user %}
+    <h2>Sorry, you have deactivated your beacon.</h2>
+    <h3>You can reactivate it <a href="{{ path('edit_user', {'username':'me'}) }}">here</a>.</h3>
+    {% else %}
+    <h2>Sorry, {{ user.username }} has deactivated his/her beacon.</h2>
+    {% endif %}
+
+</div>
+{% endblock %}

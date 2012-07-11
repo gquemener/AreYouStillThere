@@ -17,6 +17,10 @@ class UserType extends AbstractType
                 'attr' => [
                     'min' => 0,
                 ],
+            ])
+            ->add('beaconActivated', 'checkbox', [
+                'required' => false,
+                'label'    => 'Activate my beacon',
             ]);
     }
 

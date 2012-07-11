@@ -61,6 +61,11 @@ class User implements UserInterface, \Serializable
      */
     protected $salt;
 
+    /**
+     * @MongoDB\Boolean
+     */
+    protected $beaconActivated;
+
     public function __construct()
     {
         $this->followers  = new ArrayCollection();
@@ -193,5 +198,20 @@ class User implements UserInterface, \Serializable
     public function unserialize($serialized)
     {
         list($this->id, $this->username) = unserialize($serialized);
+    }
+
+    public function setBeaconActivated($beaconActivated)
+    {
+        $this->beaconActivated = $beaconActivated;
+    }
+
+    public function getBeaconActivated()
+    {
+        return $this->beaconActivated;
+    }
+
+    public function isBeaconActivated()
+    {
+        return true === $this->beaconActivated;
     }
 }
