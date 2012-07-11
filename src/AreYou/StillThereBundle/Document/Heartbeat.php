@@ -59,16 +59,6 @@ class Heartbeat
         return $this->message;
     }
 
-    public function setLocation(\AreYou\StillThereBundle\Document\Coordinates $location)
-    {
-        $this->location = $location;
-    }
-
-    public function getLocation()
-    {
-        return $this->location;
-    }
-
     public function setUser(\AreYou\StillThereBundle\Document\User $user)
     {
         $this->user = $user;

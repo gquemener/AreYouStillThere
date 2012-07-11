@@ -1,5 +1,5 @@
 parameters:
-#    are_you_still_there.example.class: AreYou\StillThereBundle\Example
+    are_you_still_there.mail.from: 'no-reply@areyoustillthe.re'
 
 services:
 #    are_you_still_there.example:
@@ -11,3 +11,16 @@ services:
         arguments:
             - AreYou\StillThereBundle\Document\User
             - username
+
+    are_you_still_there.heartbeat_listener:
+        class: AreYou\StillThereBundle\Listener\HeartbeatListener
+        arguments:
+            - @are_you_still_there.heartbeat_sender
+        tags:
+            - { name: doctrine.odm.mongodb.default_event_subscriber }
+
+    are_you_still_there.heartbeat_sender:
+        class: AreYou\StillThereBundle\Sender\HeartbeatSender
+        arguments:
+            - %are_you_still_there.mail.from%
+            - @service_container

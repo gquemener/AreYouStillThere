@@ -1,0 +1,15 @@
+<p>Good news {{ follower.username }} !</p>
+
+<p>
+    {{ user.username }} has sent a heartbeat on {{ user.lastheartbeat.date|date('d/m/Y') }} at {{ user.lastHeartBeat.date|date('H:i:s') }} with {{ user.lastHeartBeat.message ? ' message:' : ' no message' }}
+    {% if user.lastHeartBeat.message %}
+    <div>{{ user.lastHeartBeat.message }}</div>
+    {% endif %}
+</p>
+
+<p>You can access his/her profile <a href="{{ url('show_user', {'username': user.username}, true) }}">here</a></p>
+
+<em>
+--
+The AreYouStillThere Team
+</em>
