@@ -7,7 +7,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 /**
  * @MongoDB\Document(collection="heartbeats")
  */
-class Heartbeat
+class Heartbeat implements \JsonSerializable
 {
     /**
      * @MongoDB\Id
@@ -67,5 +67,14 @@ class Heartbeat
     public function getUser()
     {
         return $this->user;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'd' => $this->getDate()->getTimestamp(),
+            'm' => $this->getMessage(),
+            'u' => $this->getUser()->getUsername(),
+        ];
     }
 }

@@ -1,10 +1,8 @@
 parameters:
-    are_you_still_there.mail.from: 'no-reply@areyoustillthe.re'
+    are_you_still_there.heartbeat_sender.from: 'no-reply@areyoustillthe.re'
+    are_you_still_there.heartbeat_zmq.url: 'tcp://127.0.0.1:5555'
 
 services:
-#    are_you_still_there.example:
-#        class: %are_you_still_there.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
     are_you_still_there.user_provider:
         parent: doctrine.odm.mongodb.security.user.provider
         public: true
@@ -16,11 +14,17 @@ services:
         class: AreYou\StillThereBundle\Listener\HeartbeatListener
         arguments:
             - @are_you_still_there.heartbeat_sender
+            - @are_you_still_there.heartbeat_zmq
         tags:
             - { name: doctrine.odm.mongodb.default_event_subscriber }
 
     are_you_still_there.heartbeat_sender:
         class: AreYou\StillThereBundle\Sender\HeartbeatSender
         arguments:
-            - %are_you_still_there.mail.from%
+            - %are_you_still_there.heartbeat_sender.from%
             - @service_container
+
+    are_you_still_there.heartbeat_zmq:
+        class: AreYou\StillThereBundle\ZMQ\HeartbeatZmq
+        arguments:
+            - %are_you_still_there.heartbeat_zmq.url%

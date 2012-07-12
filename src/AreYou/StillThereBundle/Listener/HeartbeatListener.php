@@ -10,11 +10,16 @@ use AreYou\StillThereBundle\Document\Heartbeat;
 
 class HeartbeatListener implements EventSubscriber
 {
+    // Mail notification service
     private $heartbeatSender;
 
-    public function __construct($heartbeatSender)
+    // ZeroMQ pipe to communicate with node server
+    private $zmq;
+
+    public function __construct($heartbeatSender, $zmq)
     {
         $this->heartbeatSender = $heartbeatSender;
+        $this->zmq             = $zmq;
     }
 
     public function getSubscribedEvents()
@@ -35,5 +40,6 @@ class HeartbeatListener implements EventSubscriber
         $user = $heartbeat->getUser();
 
         $this->heartbeatSender->notify($user);
+        $this->zmq->send($heartbeat);
     }
 }
